@@ -71,5 +71,5 @@ class TestRomanNumerals():
     ]
 
     def test_it_generates_the_correct_roman_numeral(self):
-        for t in self.TESTCASES:
-            assert Numeral().generate(t[0]) == t[1]
+        for n, x in self.TESTCASES:
+            assert Numeral().generate(n) == x
