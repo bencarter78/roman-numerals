@@ -45,29 +45,46 @@ class Numeral:
             return
 
         if n in [4, 9]:
-            if n * multiplyer <= 10:
-                pre_numeral = self.LOOKUP[1]
-            else:
-                keys = list(self.LOOKUP.keys())
-                next_index = keys.index((n + 1) * multiplyer)
-                if (keys[next_index] / multiplyer) % 10 == 0:
-                    pre_numeral = self.LOOKUP[keys[next_index - 2]]
-                else:
-                    pre_numeral = self.LOOKUP[keys[next_index - 1]]
-
-            self.numeral.append(pre_numeral)
-            return self.numeral.extend(self.LOOKUP[(n + 1) * multiplyer])
+            return self.append([
+                self.get_preceding(n, multiplyer),
+                self.LOOKUP[(n + 1) * multiplyer]])
 
         if n % 5 == 0:
-            return self.numeral.append(self.LOOKUP[n * multiplyer])
+            return self.append(self.LOOKUP[n * multiplyer])
 
         if n > 5:
-            self.numeral.append(self.LOOKUP[5 * multiplyer])
+            self.append(self.LOOKUP[5 * multiplyer])
             return self.calculate(n % 5, multiplyer)
 
-        self.numeral.append(self.LOOKUP[multiplyer])
+        self.append(self.LOOKUP[multiplyer])
 
         self.calculate(n - 1, multiplyer)
+
+    def append(self, appendage):
+        """
+        Add the appendage to the roman numerals string
+        """
+        if type(appendage) is list:
+            return self.numeral.extend(appendage)
+        return self.numeral.append(appendage)
+
+    def get_preceding(self, n, multiplyer):
+        """
+        Return the preceeding numeral (e.g. IV, IX)
+        """
+        if n * multiplyer <= 10:
+            return self.LOOKUP[1]
+
+        keys = list(self.LOOKUP.keys())
+        next_index = keys.index((n + 1) * multiplyer)
+
+        if self.is_multiple_of_ten((keys[next_index] / multiplyer)):
+            return self.LOOKUP[keys[next_index - 2]]
+
+        return self.LOOKUP[keys[next_index - 1]]
+
+    def is_multiple_of_ten(self, n):
+        return n % 10 == 0
 
     def remove_leading_column(self):
         self.number_as_string = self.number_as_string[1:]
