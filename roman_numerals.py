@@ -21,70 +21,49 @@ class Numeral:
     }
 
     def __init__(self):
-        self.number_as_string = ''
-        self.numeral = []
+        self.numerals = []
 
     def generate(self, n):
-        """
-        Generate the corresponding Roman Numeral for a given integer
-        """
-        self.number_as_string = str(n)
+        for index, i in enumerate(str(n)):
+            self.convert(int(i), self.MULTIPLYERS[len(str(n)) - index])
 
-        while len(self.number_as_string) > 0:
-            self.calculate(
-                int(self.number_as_string[0]), self.MULTIPLYERS[len(self.number_as_string)])
-            self.remove_leading_column()
+        return ''.join(self.numerals)
 
-        return ''.join(self.numeral)
-
-    def calculate(self, n, multiplyer):
-        """
-        Determine the numerals for the given column
-        """
+    def convert(self, n, multiplyer):
         if n < 1:
             return
 
-        if n in [4, 9]:
-            return self.append([
-                self.get_preceding(n, multiplyer),
-                self.LOOKUP[(n + 1) * multiplyer]])
+        if self.is_prefixable(n):
+            self.append(self.prefix(n, multiplyer))
+            return self.append((n + 1) * multiplyer)
 
         if n % 5 == 0:
-            return self.append(self.LOOKUP[n * multiplyer])
+            return self.append(n * multiplyer)
 
         if n > 5:
-            self.append(self.LOOKUP[5 * multiplyer])
-            return self.calculate(n % 5, multiplyer)
+            self.append(5 * multiplyer)
+            return self.convert(n % 5, multiplyer)
 
-        self.append(self.LOOKUP[multiplyer])
+        self.append(multiplyer)
+        self.convert(n - 1, multiplyer)
 
-        self.calculate(n - 1, multiplyer)
+    def is_prefixable(self, n):
+        return n in [4, 9]
 
-    def append(self, appendage):
-        """
-        Add the appendage to the roman numerals string
-        """
-        if type(appendage) is list:
-            return self.numeral.extend(appendage)
-        return self.numeral.append(appendage)
-
-    def get_preceding(self, n, multiplyer):
-        """
-        Return the preceeding numeral (e.g. IV, IX)
-        """
+    def prefix(self, n, multiplyer):
         if n * multiplyer <= 10:
-            return self.LOOKUP[1]
+            return 1
 
         keys = list(self.LOOKUP.keys())
         next_index = keys.index((n + 1) * multiplyer)
 
         if self.is_multiple_of_ten((keys[next_index] / multiplyer)):
-            return self.LOOKUP[keys[next_index - 2]]
+            return keys[next_index - 2]
 
-        return self.LOOKUP[keys[next_index - 1]]
+        return keys[next_index - 1]
 
     def is_multiple_of_ten(self, n):
         return n % 10 == 0
 
-    def remove_leading_column(self):
-        self.number_as_string = self.number_as_string[1:]
+    def append(self, index):
+        return self.numerals.append(self.LOOKUP[index])

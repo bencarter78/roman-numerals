@@ -65,6 +65,8 @@ class TestRomanNumerals():
         (900, 'CM'),
         (999, 'CMXCIX'),
         (1000, 'M'),
+        (1001, 'MI'),
+        (2000, 'MM'),
         (3999, 'MMMCMXCIX'),
     ]
 
