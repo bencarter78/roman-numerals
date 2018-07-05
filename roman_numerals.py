@@ -24,6 +24,9 @@ class Numeral:
         self.numerals = []
 
     def generate(self, n):
+        if not isinstance(n, int) or isinstance(n, bool):
+            return
+
         for index, i in enumerate(str(n)):
             self.convert(int(i), self.MULTIPLYERS[len(str(n)) - index])
 
