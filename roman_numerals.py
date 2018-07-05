@@ -13,30 +13,27 @@ class Numeral:
         1000: 'M'
     })
 
+    MULTIPLYERS = {
+        1: 1,
+        2: 10,
+        3: 100,
+        4: 1000
+    }
+
     def __init__(self):
         self.number_as_string = ''
         self.numeral = []
 
     def generate(self, n):
-        print("Converting %s" % n)
         """
         Generate the corresponding Roman Numeral for a given integer
         """
         self.number_as_string = str(n)
 
-        if len(self.number_as_string) == 4:
-            self.calculate(int(self.number_as_string[0]), 1000)
-            self.number_as_string = self.number_as_string[1:]
-
-        if len(self.number_as_string) == 3:
-            self.calculate(int(self.number_as_string[0]), 100)
-            self.number_as_string = self.number_as_string[1:]
-
-        if len(self.number_as_string) == 2:
-            self.calculate(int(self.number_as_string[0]), 10)
-            self.number_as_string = self.number_as_string[1:]
-
-        self.calculate(int(self.number_as_string[0]), 1)
+        while len(self.number_as_string) > 0:
+            self.calculate(
+                int(self.number_as_string[0]), self.MULTIPLYERS[len(self.number_as_string)])
+            self.remove_leading_column()
 
         return ''.join(self.numeral)
 
@@ -71,3 +68,6 @@ class Numeral:
         self.numeral.append(self.LOOKUP[multiplyer])
 
         self.calculate(n - 1, multiplyer)
+
+    def remove_leading_column(self):
+        self.number_as_string = self.number_as_string[1:]
