@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 class Numeral:
 
-    LOOKUP = OrderedDict({
+    NUMERALS = OrderedDict({
         1: 'I',
         5: 'V',
         10: 'X',
@@ -36,7 +36,7 @@ class Numeral:
         if units < 1:
             return
 
-        if units in [4, 9]:
+        if self._is_double_numeral(units):
             self._append(self._prefix(units, multiplyer))
             return self._append((units + 1) * multiplyer)
 
@@ -50,14 +50,17 @@ class Numeral:
         self._append(multiplyer)
         self._convert(units - 1, multiplyer)
 
+    def _is_double_numeral(self, units):
+        return units in [4, 9]
+
     def _append(self, index):
-        return self.numerals.append(self.LOOKUP[index])
+        return self.numerals.append(self.NUMERALS[index])
 
     def _prefix(self, units, multiplyer):
         if units * multiplyer <= 10:
             return 1
 
-        keys = list(self.LOOKUP.keys())
+        keys = list(self.NUMERALS.keys())
         next_index = keys.index((units + 1) * multiplyer)
 
         if self._is_multiple_of_ten((keys[next_index] / multiplyer)):

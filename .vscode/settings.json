@@ -11,5 +11,6 @@
     ],
     "python.unitTest.pyTestEnabled": false,
     "python.unitTest.nosetestsEnabled": false,
-    "python.unitTest.unittestEnabled": true
+    "python.unitTest.unittestEnabled": true,
+    "python.pythonPath": "/Users/bencarter/.local/share/virtualenvs/roman-numerals-MI3Tl4b1/bin/python"
 }
